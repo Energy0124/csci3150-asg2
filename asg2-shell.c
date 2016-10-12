@@ -30,6 +30,8 @@ void gofolderCommand(char **args0, int argSize);
 
 void logCommand();
 
+void byeCommand(int size);
+
 /* Functions */
 int main(int argc, char *argv[]) {
     int isExit = 0;
@@ -70,7 +72,7 @@ int getUserInput(char *input) {
 
     strcpy(input, buf);
     if (historySize < 512) {
-        strcpy(history[historySize++], buf);
+        strcpy((char *) history[historySize++], buf);
     }
     return 0;
 }
@@ -99,15 +101,26 @@ void tokenizeInput(char *input) {
         gofolderCommand(tokens, argSize);
     } else if (strcmp(tokens[0], "log") == 0) {
         logCommand();
+    } else if (strcmp(tokens[0], "bye") == 0) {
+        byeCommand(argSize);
     }
 
     return;
 }
 
+void byeCommand(int size) {
+    if (size > 1) {
+        printf("%s\n", "bye: wrong number of arguments");
+        return;
+    } else {
+        exit(0);
+    }
+}
+
 void logCommand() {
     int i;
     for (i = 0; i < historySize; ++i) {
-        printf("[%d]: %s\n", i + 1, history[i]);
+        printf("[%d]: %s\n", i + 1, (char *) history[i]);
     }
 }
 
