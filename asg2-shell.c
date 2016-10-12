@@ -12,11 +12,11 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <signal.h>
+#include <dirent.h>
 
 
 /*Global Variable*/
-char currentDirectory[1024]="";
-char *tokens[255];
+char currentDirectory[1024] = "";
 
 
 /* Function Declaration */
@@ -24,7 +24,7 @@ int getUserInput(char *input);
 
 void tokenizeInput(char *input);
 
-void gofolder(char *pString[255]);
+void gofolder(char *args0[255],int argSize);
 
 /* Functions */
 int main(int argc, char *argv[]) {
@@ -77,28 +77,59 @@ int getUserInput(char *input) {
 void tokenizeInput(char *input) {
     char buf[255];
     strcpy(buf, input);
+    char *tokens[255];
 
     char *token = strtok(buf, " ");
-    int count=0;
+    int argSize = 0;
     while (token != NULL) {
-        tokens[count]= token;
-    //    printf("%s\n", tokens[count]);
+        tokens[argSize] = token;
+        //    printf("%s\n", tokens[count]);
         token = strtok(NULL, " ");
-        count++;
+        argSize++;
     }
-    int i;
 
-    if(strcmp(tokens[0],"gofolder")==0){
-        gofolder(tokens);
-    }else{
+
+//    int argSize = 0;
+//    int i;
+//    for (i = 0; i < 255; ++i) {
+//        if (tokens[i] != NULL) {
+//            argSize++;
+//            //if (tokens[i][0]!='\0') argSize++;
+//        }
+//
+//    }
+//        printf("%d\n", argSize);
+
+
+    if (strcmp(tokens[0], "gofolder") == 0) {
+        gofolder(tokens,argSize);
+    } else {
 
     }
 
     return;
 }
 
-void gofolder(char *args[255]) {
-//    if(args[1][0]=='\0'){
-//        printf("%d","gofolder: wrong number of arguments\n");
-//    }
+void gofolder(char *args[255],int argSize) {
+    if (args[1] != NULL) {
+        if (args[1][0] == '\0' ||argSize>2) {
+            printf("%s\n", "gofolder: wrong number of arguments");
+            return;
+        } else{
+            DIR* dir = opendir(args[1]);
+            if (dir)
+            {
+                /* Directory exists. */
+                closedir(dir);
+            }
+            else if (ENOENT == errno)
+            {
+                /* Directory does not exist. */
+                printf("{%s}: cannot change directory\n",args[1]);
+            }
+        }
+    } else{
+        printf("%s\n", "gofolder: wrong number of arguments");
+        return;
+    }
 }
