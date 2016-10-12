@@ -89,16 +89,6 @@ void tokenizeInput(char *input) {
     }
 
 
-//    int argSize = 0;
-//    int i;
-//    for (i = 0; i < 255; ++i) {
-//        if (tokens[i] != NULL) {
-//            argSize++;
-//            //if (tokens[i][0]!='\0') argSize++;
-//        }
-//
-//    }
-//        printf("%d\n", argSize);
 
 
     if (strcmp(tokens[0], "gofolder") == 0) {
@@ -121,6 +111,8 @@ void gofolder(char *args[255],int argSize) {
             {
                 /* Directory exists. */
                 closedir(dir);
+                chdir(args[1]);
+                getcwd(currentDirectory, sizeof(currentDirectory));
             }
             else if (ENOENT == errno)
             {
