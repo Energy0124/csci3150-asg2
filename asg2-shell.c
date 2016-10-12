@@ -36,8 +36,14 @@ void byeCommand(int size);
 int main(int argc, char *argv[]) {
     int isExit = 0;
 
+    signal(SIGINT, SIG_IGN);
+    signal(SIGTERM, SIG_IGN);
+    signal(SIGQUIT, SIG_IGN);
+    signal(SIGTSTP, SIG_IGN);
+
     //init cwd
     getcwd(currentDirectory, sizeof(currentDirectory));
+
 
     do {
         char rawInput[255];
@@ -103,6 +109,8 @@ void tokenizeInput(char *input) {
         logCommand();
     } else if (strcmp(tokens[0], "bye") == 0) {
         byeCommand(argSize);
+    } else {
+
     }
 
     return;
