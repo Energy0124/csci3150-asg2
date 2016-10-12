@@ -1,4 +1,7 @@
 /*
+ * Author: Ling Leong
+ * SID:1155062557
+ *
 * CSCI3150 Assignment 2 - Writing a Simple Shell
 * Feel free to modify the given code.
 * Press Ctrl-D to end the program
