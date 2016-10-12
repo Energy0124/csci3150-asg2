@@ -7,5 +7,3 @@ set(SOURCE_FILES
     asg2-shell.c)
 
 add_executable(csci3150_asg2_release ${SOURCE_FILES})
-
-add_executable(csci3150_asg2_cpp asg2-shell-cpp.cpp)

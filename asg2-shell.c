@@ -97,9 +97,7 @@ int getUserInput(char *input) {
 
 void tokenizeInput(char *input) {
     char buf[255] = {'\0'};
-    char obuf[255] = {'\0'};
     strcpy(buf, input);
-    strcpy(obuf, input);
     char *tokens[255] = {NULL};
     tokens[0] = "";
     char **part[255] = {tokens};
@@ -115,82 +113,45 @@ void tokenizeInput(char *input) {
         argSize++;
     }
     tokens[argSize] = NULL;
-
     part[sizeOfPart] = tokens;
-    // partSize[sizeOfPart]=argSize;
     operators[sizeOfPart] = 0;
-
-/*    int i;
-    for (i = 0; i < argSize; ++i) {
-        if (strcmp(tokens[i], "||") == 0||strcmp(tokens[i], "&&") == 0) {
-            partSize[sizeOfPart]=i+1;
-        }
-    }*/
     sizeOfPart++;
-
-
-    char operator = 0;
-    char **part2 = tokens;
-    int part2Size = 0;
     int tSize = 0;
     int j;
     for (j = 0; j < argSize; ++j) {
-
         if (strcmp(tokens[j], "||") == 0) {
-
             operators[sizeOfPart] = '|';
             part[sizeOfPart] = &tokens[j + 1];
-            //part2Size = argSize - j - 1;
             tokens[j] = NULL;
-//            partSize[sizeOfPart]=argSize - j - 1;
-//            partSize[sizeOfPart-1]=partSize[sizeOfPart-1]-partSize[sizeOfPart];
             partSize[sizeOfPart - 1] = sizeOfPart > 1 ? tSize - 1 : tSize;
             tSize = 0;
             sizeOfPart++;
-
-            /* operator = '|';
-             part2 = &tokens[j + 1];
-             part2Size = j == 0 ? argSize - j : argSize - j - 1;
-             tokens[j] = NULL;
-             argSize = j;
-             break;*/
         } else if (strcmp(tokens[j], "&&") == 0) {
-
             operators[sizeOfPart] = '&';
             part[sizeOfPart] = &tokens[j + 1];
-            //part2Size = argSize - j - 1;
             tokens[j] = NULL;
-            //partSize[sizeOfPart]=argSize - j - 1;
             partSize[sizeOfPart - 1] = sizeOfPart > 1 ? tSize - 1 : tSize;
             tSize = 0;
             sizeOfPart++;
-            /* operator = '&';
-             part2 = &tokens[j + 1];
-             part2Size = j == 0 ? argSize - j : argSize - j - 1;
-             tokens[j] = NULL;
-             argSize = j;
-             break;*/
         }
         tSize++;
-
     }
-    partSize[sizeOfPart - 1] = sizeOfPart > 0 ? tSize - 1 : tSize;;
+    partSize[sizeOfPart - 1] = sizeOfPart > 0 ? tSize - 1 : tSize;
     tSize = 0;
     sizeOfPart++;
 
-
     int status[255] = {0};
-    if (part[0] != NULL) {
+    if (part[0] != NULL && *part[0] != NULL) {
         status[0] = parseCommand(part[0], partSize[0]);
     }
-    int n = 0;
 
     int result = 0;
     if (status[0] == 0) result = 1;
+    int n = 0;
     for (n = 1; n < sizeOfPart; n++) {
         if (operators[n] == '&') {
             if (result == 1) {
-                if (part[n] != NULL) {
+                if (part[n] != NULL && *part[n] != NULL) {
                     status[n] = parseCommand(part[n], partSize[n]);
                     if (status[n] == 0) result = result && 1;
                     else result = result && 0;
@@ -198,7 +159,7 @@ void tokenizeInput(char *input) {
             }
         } else if (operators[n] == '|') {
             if (result == 0) {
-                if (part[n] != NULL) {
+                if (part[n] != NULL && *part[n] != NULL) {
                     status[n] = parseCommand(part[n], partSize[n]);
                     if (status[n] == 0) result = result || 1;
                     else result = result || 0;
@@ -206,23 +167,6 @@ void tokenizeInput(char *input) {
             }
         }
     }
-
-
-
-/*    int status = 0;
-    if (tokens[0] != NULL) {
-        status = parseCommand(tokens, argSize);
-    }
-    if (part2[0] != NULL) {
-        if (status == 0 && part2Size > 0 && operator == '&') {
-            status = parseCommand(part2, part2Size);
-
-        } else if (part2Size > 0 && operator == '|') {
-            status = parseCommand(part2, part2Size);
-        }
-    }*/
-
-
     return;
 }
 
