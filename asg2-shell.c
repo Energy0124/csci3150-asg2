@@ -94,7 +94,7 @@ void tokenizeInput(char *input) {
     char buf[255];
     strcpy(buf, input);
     char *tokens[255];
-
+    tokens[0] = "";
     char *token = strtok(buf, " ");
     int argSize = 0;
     while (token != NULL) {
